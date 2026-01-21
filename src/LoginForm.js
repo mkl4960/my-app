@@ -61,9 +61,9 @@ function LoginForm({ onRegisterClick, onLoginSuccess }) {
     </form>
     {error && <p style={{ color: 'red' }}>{error}</p>}
     <p>
-      <a href="#" onClick={(e) => { e.preventDefault(); onRegisterClick(); }} style={{ color: '#f0f0f0' }}>
+      <button type="button" onClick={onRegisterClick} style={{ color: '#f0f0f0', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer' }}>
         Register
-      </a>
+      </button>
     </p>
     </>
   );

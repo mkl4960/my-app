@@ -62,9 +62,9 @@ function RegisterForm({ onBackToLogin }) {
       </form>
       {message && <p>{message}</p>}
       <p>
-        <a href="#" onClick={(e) => { e.preventDefault(); onBackToLogin(); }} style={{ color: '#f0f0f0' }}>
+        <button type="button" onClick={onBackToLogin} style={{ color: '#f0f0f0', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer' }}>
           Back to Login
-        </a>
+        </button>
       </p>
     </div>
   );
