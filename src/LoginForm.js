@@ -1,18 +1,44 @@
 import React, { useState } from 'react';
 
-function LoginForm() {
+function LoginForm({ onRegisterClick, onLoginSuccess }) {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login attempt:', { userId, password });
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('https://my-app.runasp.net/api/Auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: userId, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('authToken', data.token);
+        onLoginSuccess();
+      } else {
+        setError('Login failed. Please check your credentials.');
+      }
+    } catch (error) {
+      setError('Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit}>
       <div>
-        <label>User ID:</label>
+        <label>Email:</label>
         <input
           type="text"
           value={userId}
@@ -29,8 +55,17 @@ function LoginForm() {
           required
         />
       </div>
-      <button type="submit">Login</button>
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Logging in...' : 'Login'}
+      </button>
     </form>
+    {error && <p style={{ color: 'red' }}>{error}</p>}
+    <p>
+      <a href="#" onClick={(e) => { e.preventDefault(); onRegisterClick(); }} style={{ color: '#f0f0f0' }}>
+        Register
+      </a>
+    </p>
+    </>
   );
 }
 
